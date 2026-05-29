@@ -1,0 +1,27 @@
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
+
+  // Refresh session so cookies stay valid
+  const { data: { session } } = await supabase.auth.getSession();
+
+  const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith("/dashboard") && !session) {
+    return NextResponse.redirect(new URL("/auth", req.url));
+  }
+
+  if (pathname === "/auth" && session) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
+  return res;
+}
+
+export const config = {
+  matcher: ["/dashboard/:path*", "/auth"],
+};
