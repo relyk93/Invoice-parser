@@ -18,108 +18,71 @@ function AuthForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
 
     if (mode === "signup") {
       const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-        return;
-      }
-      setSignupDone(true);
-      setLoading(false);
-      return;
+      if (error) { setError(error.message); setLoading(false); return; }
+      setSignupDone(true); setLoading(false); return;
     }
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-      return;
-    }
+    if (error) { setError(error.message); setLoading(false); return; }
 
     if (plan) {
       const res = await fetch(`/api/stripe/checkout?plan=${plan}`);
-      if (res.redirected) {
-        window.location.href = res.url;
-        return;
-      }
-      const data = await res.json().catch(() => null);
-      if (data?.url) {
-        window.location.href = data.url;
-        return;
-      }
+      if (res.redirected) { window.location.href = res.url; return; }
     }
-
     router.push("/dashboard");
   }
 
   if (signupDone) {
     return (
-      <div className="bg-white rounded-2xl border p-8 text-center space-y-3">
-        <div className="text-3xl">📬</div>
-        <h2 className="font-semibold text-lg">Check your email</h2>
-        <p className="text-sm text-gray-500">
-          We sent a confirmation link to <strong>{email}</strong>. Click it to activate your
-          account, then come back here to sign in.
+      <div style={{ background: "var(--surface)", borderRadius: 28, padding: "40px 32px", border: "1.5px solid var(--border)", boxShadow: "var(--card-shadow-lg)", textAlign: "center" }}>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>📬</div>
+        <h2 style={{ fontWeight: 800, fontSize: "1.2rem", color: "var(--text)", marginBottom: 10 }}>Check your email</h2>
+        <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, marginBottom: 20 }}>
+          We sent a confirmation link to <strong style={{ color: "var(--text)" }}>{email}</strong>. Click it to activate your account, then sign in.
         </p>
-        <button
-          onClick={() => { setSignupDone(false); setMode("signin"); }}
-          className="text-sm text-blue-600 hover:underline"
-        >
-          Back to sign in
+        <button onClick={() => { setSignupDone(false); setMode("signin"); }} style={{ fontWeight: 700, fontSize: 14, color: "var(--accent)", background: "none", border: "none", cursor: "pointer" }}>
+          Back to sign in →
         </button>
       </div>
     );
   }
 
+  const inputStyle = {
+    width: "100%", padding: "13px 16px", borderRadius: 14, border: "1.5px solid var(--border)",
+    background: "var(--bg)", fontSize: 14, fontWeight: 500, color: "var(--text)",
+    outline: "none", display: "block",
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl border p-8 space-y-4">
+    <form onSubmit={handleSubmit} style={{ background: "var(--surface)", borderRadius: 28, padding: "36px 28px", border: "1.5px solid var(--border)", boxShadow: "var(--card-shadow-lg)", display: "flex", flexDirection: "column", gap: 16 }}>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="you@example.com"
-        />
+        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "var(--muted)", marginBottom: 7 }}>Email</label>
+        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={inputStyle} />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-        <input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="••••••••"
-          minLength={6}
-        />
+        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "var(--muted)", marginBottom: 7 }}>Password</label>
+        <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" minLength={6} style={inputStyle} />
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && (
+        <div style={{ padding: "12px 16px", borderRadius: 14, background: "#fef2f2", border: "1px solid #fecaca", color: "#dc2626", fontSize: 13, fontWeight: 600 }}>
+          {error}
+        </div>
+      )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-xl bg-blue-600 text-white py-2.5 font-medium hover:bg-blue-700 transition disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} style={{ width: "100%", padding: "14px", borderRadius: 999, background: "var(--text)", color: "#fff", fontWeight: 800, fontSize: 15, border: "none", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.6 : 1, boxShadow: "0 4px 14px rgba(0,0,0,0.15)", marginTop: 4 }}>
         {loading ? "Loading…" : mode === "signin" ? "Sign in" : "Create account"}
       </button>
 
-      <p className="text-center text-sm text-gray-500">
-        {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
-        <button
-          type="button"
-          onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(null); }}
-          className="text-blue-600 hover:underline font-medium"
-        >
-          {mode === "signin" ? "Sign up" : "Sign in"}
+      <p style={{ textAlign: "center", fontSize: 14, color: "var(--muted)", margin: 0 }}>
+        {mode === "signin" ? "No account? " : "Already have one? "}
+        <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(null); }} style={{ fontWeight: 700, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", fontSize: 14 }}>
+          {mode === "signin" ? "Sign up free" : "Sign in"}
         </button>
       </p>
     </form>
@@ -128,19 +91,20 @@ function AuthForm() {
 
 export default function AuthPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <a href="/" className="font-bold text-xl tracking-tight">
-            Invoice Parser AI
-          </a>
-          <p className="text-gray-500 mt-2 text-sm">Sign in or create an account to continue</p>
-        </div>
+    <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 1.25rem", position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", top: -200, left: "50%", transform: "translateX(-50%)", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
 
+      <div style={{ width: "100%", maxWidth: 400, position: "relative" }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <a href="/" style={{ fontWeight: 900, fontSize: 22, letterSpacing: "-0.03em", color: "var(--text)", textDecoration: "none" }}>
+            Invoice<span style={{ color: "var(--accent)" }}>AI</span>
+          </a>
+          <p style={{ color: "var(--muted)", marginTop: 8, fontSize: 14 }}>Sign in or create an account to continue</p>
+        </div>
         <Suspense>
           <AuthForm />
         </Suspense>
       </div>
-    </main>
+    </div>
   );
 }
