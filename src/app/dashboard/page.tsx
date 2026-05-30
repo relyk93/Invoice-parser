@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { PLANS } from "@/lib/plans";
 import ResultTable from "@/components/ResultTable";
@@ -62,13 +63,13 @@ function Dashboard() {
       {/* Nav */}
       <nav style={{ background: "rgba(255,255,255,0.85)", borderBottom: "1px solid var(--border)", backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between", height: 60 }}>
-          <a href="/" style={{ fontWeight: 900, fontSize: 18, letterSpacing: "-0.03em", color: "var(--text)", textDecoration: "none" }}>
+          <Link href="/" style={{ fontWeight: 900, fontSize: 18, letterSpacing: "-0.03em", color: "var(--text)", textDecoration: "none" }}>
             Invoice<span style={{ color: "var(--accent)" }}>AI</span>
-          </a>
+          </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <a href="/" style={{ fontWeight: 700, fontSize: 13, color: "var(--text)", textDecoration: "none", padding: "7px 16px", borderRadius: 999, border: "1.5px solid var(--border)", background: "var(--surface)" }}>
+            <Link href="/" style={{ fontWeight: 700, fontSize: 13, color: "var(--text)", textDecoration: "none", padding: "7px 16px", borderRadius: 999, border: "1.5px solid var(--border)", background: "var(--surface)" }}>
               + Parse new
-            </a>
+            </Link>
             <button onClick={async () => { await supabase.auth.signOut(); router.push("/"); }} style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", background: "none", border: "none", cursor: "pointer" }}>
               Sign out
             </button>
@@ -113,9 +114,9 @@ function Dashboard() {
               Manage billing
             </a>
           ) : (
-            <a href="/#pricing" style={{ padding: "10px 20px", borderRadius: 999, fontWeight: 700, fontSize: 13, color: "#fff", textDecoration: "none", background: "var(--text)" }}>
+            <Link href="/#pricing" style={{ padding: "10px 20px", borderRadius: 999, fontWeight: 700, fontSize: 13, color: "#fff", textDecoration: "none", background: "var(--text)" }}>
               View plans
-            </a>
+            </Link>
           )}
         </div>
 
@@ -174,7 +175,7 @@ function Dashboard() {
             ) : (
               <div style={{ background: "var(--surface)", borderRadius: 24, border: "1.5px solid var(--border)", boxShadow: "var(--card-shadow)", padding: 48, textAlign: "center" }}>
                 <p style={{ fontWeight: 700, color: "var(--muted)", marginBottom: 12 }}>Select a result to view it</p>
-                <a href="/" style={{ fontWeight: 700, fontSize: 14, color: "var(--accent)", textDecoration: "none" }}>+ Parse a new invoice</a>
+                <Link href="/" style={{ fontWeight: 700, fontSize: 14, color: "var(--accent)", textDecoration: "none" }}>+ Parse a new invoice</Link>
               </div>
             )}
           </main>

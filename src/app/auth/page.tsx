@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 function AuthForm() {
@@ -96,9 +97,9 @@ export default function AuthPage() {
 
       <div style={{ width: "100%", maxWidth: 400, position: "relative" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <a href="/" style={{ fontWeight: 900, fontSize: 22, letterSpacing: "-0.03em", color: "var(--text)", textDecoration: "none" }}>
+          <Link href="/" style={{ fontWeight: 900, fontSize: 22, letterSpacing: "-0.03em", color: "var(--text)", textDecoration: "none" }}>
             Invoice<span style={{ color: "var(--accent)" }}>AI</span>
-          </a>
+          </Link>
           <p style={{ color: "var(--muted)", marginTop: 8, fontSize: 14 }}>Sign in or create an account to continue</p>
         </div>
         <Suspense>

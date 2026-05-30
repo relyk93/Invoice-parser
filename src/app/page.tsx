@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import UploadZone from "@/components/UploadZone";
 import ResultTable from "@/components/ResultTable";
 import { supabase } from "@/lib/supabase";
@@ -50,17 +51,17 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             {userEmail ? (
               <>
-                <a href="/dashboard" style={{ fontWeight: 700, fontSize: 14, color: "var(--text)", textDecoration: "none", padding: "7px 16px", borderRadius: 999, border: "1.5px solid var(--border)", background: "var(--surface)" }}>
+                <Link href="/dashboard" style={{ fontWeight: 700, fontSize: 14, color: "var(--text)", textDecoration: "none", padding: "7px 16px", borderRadius: 999, border: "1.5px solid var(--border)", background: "var(--surface)" }}>
                   Dashboard
-                </a>
+                </Link>
                 <button onClick={async () => { await supabase.auth.signOut(); setUserEmail(null); }} style={{ fontSize: 13, color: "var(--muted)", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>
                   Sign out
                 </button>
               </>
             ) : (
-              <a href="/auth" style={{ fontWeight: 700, fontSize: 14, color: "#fff", textDecoration: "none", padding: "8px 20px", borderRadius: 999, background: "var(--text)", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
+              <Link href="/auth" style={{ fontWeight: 700, fontSize: 14, color: "#fff", textDecoration: "none", padding: "8px 20px", borderRadius: 999, background: "var(--text)", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
                 Sign in
-              </a>
+              </Link>
             )}
           </div>
         </div>
@@ -155,9 +156,9 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <a href="/auth?plan=starter" style={{ display: "block", textAlign: "center", padding: "13px", borderRadius: 999, border: "1.5px solid var(--border)", fontWeight: 700, fontSize: 14, color: "var(--text)", textDecoration: "none", background: "var(--bg)" }}>
+            <Link href="/auth?plan=starter" style={{ display: "block", textAlign: "center", padding: "13px", borderRadius: 999, border: "1.5px solid var(--border)", fontWeight: 700, fontSize: 14, color: "var(--text)", textDecoration: "none", background: "var(--bg)" }}>
               Get started
-            </a>
+            </Link>
           </div>
 
           {/* Pro */}
@@ -180,9 +181,9 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <a href="/auth?plan=pro" style={{ display: "block", textAlign: "center", padding: "13px", borderRadius: 999, fontWeight: 800, fontSize: 14, color: "var(--text)", textDecoration: "none", background: "#fff", boxShadow: "var(--btn-shadow)", position: "relative" }}>
+            <Link href="/auth?plan=pro" style={{ display: "block", textAlign: "center", padding: "13px", borderRadius: 999, fontWeight: 800, fontSize: 14, color: "var(--text)", textDecoration: "none", background: "#fff", boxShadow: "var(--btn-shadow)", position: "relative" }}>
               Get started
-            </a>
+            </Link>
           </div>
         </div>
       </section>
